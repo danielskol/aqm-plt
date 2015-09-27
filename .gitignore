@@ -1,0 +1,5 @@
+# Ignore all latex temporal files
+report/*.aux
+report/*.log
+report/*.bbl
+report/*.blg
