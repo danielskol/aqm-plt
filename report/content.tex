@@ -1,3 +1,25 @@
 \section{Problem Definition}
 
-Some text\cite{Lai:2014}.
+General formulation is
+$$
+    \dot{x} = f(x(t),~q(t)),
+$$
+$$
+    \dot{p} = f(y(t),~p(t)),
+$$
+where
+$$
+    q = R^T p, \quad y = R x.
+$$
+
+In case of DCTCP on router one can derive\cite{Lai:2014}.
+\begin{equation}
+    \dot{x}_f(t) = \frac{1}{d^2_f} \left[ 1 - \frac{1}{2} d_f x_f \sigma\left(\frac{t}{d_f}\right) \right],
+\end{equation}
+where $d_f$ is RTT, function $\sigma(\cdot)$ is
+$$
+    \sigma(x) = \left\{\begin{array}{cc}
+        x & 0 \le x \le 1, \\
+        1 & x \ge 1.
+    \end{array}\right.
+$$
