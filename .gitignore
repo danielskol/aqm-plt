@@ -3,3 +3,8 @@ report/*.aux
 report/*.log
 report/*.bbl
 report/*.blg
+report/*.pdf
+report/*.backup
+# Ignore kde spcific files in source
+src/pltsim/.kde*
+src/pltsim/*.kde*

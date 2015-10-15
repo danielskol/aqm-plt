@@ -1,0 +1,26 @@
+Suppose we have an Internet network with $N$ routers and $F$ flow sources. To keep all paths of flows, we would create a routing matrix $R \in \{0, 1\}^{F \times N}$, where $R_{f, n} = 1$ iff flow $f$ passes trough router $n$. We should notice that, specifying only routing matrix, we lost information about order of routers in a flow, but, as we see later, for our task it is sufficient. All flow sources are characterized by their rate $x_f$ and congestion measure it detected $q_f$. A flow adapts its rate in following manner.
+\begin{equation}
+    \dot{x}_f(t) = \kappa_f \left( 1 - \frac{q_f}{U'(x_f)} \right) \label{eq:rate_dynamic}
+\end{equation}
+Here $U(\cdot)$ is a strictly concave flow utility function and $\kappa_f$ is just a scaling constant. Changing utility function, we could get a lot of different TCP algorithms, like TCP Reno, by putting $U(x) = -\frac{1}{d_f^2 x}$, where $d_f$ is a RTT (round-trip-time).
+
+The characteristics of a router is its backlog (number of packets buffered) $b$ and aggregated flows rate $y$. All routers have the same rate, they transmit a packet, $c$. This means, that dynamics of backlog is simply incoming packets subtracting sent packets.
+\begin{equation}
+    \dot{b}_n(t) = y_n - c \label{eq:backlog_dynamic}
+\end{equation}
+
+Also, using our routing matrix, we get following equalities.
+\begin{align}
+    y_n & = \sum \limits_{f=1}^F R_{f,n} x_f \label{eq:aggregated_flow} \\
+    q_f & = \sum \limits_{n=1}^N R_{f,n} p_n \frac{x_f}{y_n} \label{eq:source_congestion}
+\end{align}
+Equation \ref{eq:aggregated_flow} simply shows, that aggregated flow is sum of flow rates, which pass through given router. Next equation is a bit more complicated. First, we should say, how does the router makes source ``understand'' a congestion measure. It just drops some packets (does not send back a corresponding, to a packet, ACK message), so the TCP algorithm would decrease its RTT. In equation \ref{eq:source_congestion} $p_n$ is a probability, that $n$th router will drop a packet, this implies, that the probability of dropping packet from flow $f$ is proportional to the number of packets of flow $f$ among all packets came to router $\frac{x_f}{y_n}$. Finally, the probability of a packet from flow $f$ being dropped is, approximately, equal to sum of probabilities of dropping packet of flow $f$ on router $n$ over only those router, which a participate in transmitting packets of a given flow.
+
+The last thing we should do to define a the problem is to define congestion measure on a single router.
+\begin{equation}
+    p_n = h(I_\beta(t)) \label{eq:PLT}
+\end{equation}
+Where $h(\cdot)$ is some continuous non-decreasing function and $I_\beta(t) = \sup \{\tau > 0 | \forall t' \in [t - \tau, t] : b(t') > \beta\}$ is the time backlog spent above some predefined threshold $\beta$. This last equation states, that AQM algorithm in our model satisfies the PLT principle.
+%TODO: add several constaints on h
+
+Defining all those equation \ref{eq:rate_dynamic}-\ref{eq:PLT}, we refer to them as a PLT model on arbitrary network topology.
