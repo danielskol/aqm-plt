@@ -18,9 +18,9 @@ Equation \ref{eq:aggregated_flow} simply shows, that aggregated flow is sum of f
 
 The last thing we should do to define a the problem is to define congestion measure on a single router.
 \begin{equation}
-    p_n = h(I_\beta(t)) \label{eq:PLT}
+    p_n = h(I_{\beta,n}(t)) \label{eq:PLT}
 \end{equation}
-Where $h(\cdot)$ is some continuous non-decreasing function and $I_\beta(t) = \sup \{\tau > 0 | \forall t' \in [t - \tau, t] : b(t') > \beta\}$ is the time backlog spent above some predefined threshold $\beta$. This last equation states, that AQM algorithm in our model satisfies the PLT principle.
+Where $h(\cdot)$ is some continuous non-decreasing function and $I_{\beta,n}(t) = \sup \{\tau > 0 | \forall t' \in [t - \tau, t] : b_n(t') > \beta\}$ is the time backlog spent above some predefined threshold $\beta$. This last equation states, that AQM algorithm in our model satisfies the PLT principle.
 %TODO: add several constaints on h
 
 Defining all those equation \ref{eq:rate_dynamic}-\ref{eq:PLT}, we refer to them as a PLT model on arbitrary network topology.

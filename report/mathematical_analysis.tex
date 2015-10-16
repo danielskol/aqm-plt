@@ -1,0 +1,52 @@
+The study of the PLT model on arbitrary topology is done in the same way as in \cite{Lai:PLT}. The biggest difference is that instead of two modes we will get $2^N$ modes, which would complicate further analysis, specially in \cite[Proposition 7.1]{Lai:PLT} proof. In order to overcome this difficulty, we would develop a framework, which will transform a problem into a dynamic system at subsection \ref{subsec:arbitary_topology} and solve it in a two routers case at subsection \ref{subsec:two_routers}.
+\subsection{Arbitrary topology}
+\label{subsec:arbitary_topology}
+As in \cite{Lai:PLT} we should notice, that because of the discontinuities in the function $I_{\beta,n}(\cdot)$ (this function drops to zero, when backlog of $n$th router decrease to $\beta$), the initial system becomes a hard problem, so we need to split the time scale into intervals, where $I_{\beta,n}$ is continuous for all $n \in \{1,\ldots,N\}$. This implies, $\forall t \in (t_s, t_e),\, n \in \{1,\ldots,N\} : b_n(t) \neq \beta$, where $t_s,t_e$ is start and the end of interval. Due to the continuity of the $b_n(t)$, we could characterize all intervals by length of backlogs.
+\begin{definition}
+    Let's call a PLT system on arbitrary topology in $\mathcal{M} \in \{ \mathcal{A,B} \}^N$ mode over time interval $(t_s, t_e)$, if $\forall t \in (t_s, t_e) \forall n \in \{1,\ldots,N\} : b_n(t) > \beta \text{ if } \mathcal{M}[n] = \mathcal{A} \text{ else } b_n(t) < \beta$. Or in other words, $\mathcal{M}[n]$ is $\mathcal{A}$ if backlog of $n$th router stays above level $\beta$ and is $\mathcal{B}$ if it stays below.
+\end{definition}
+As we see such a system has $2^N$ number of modes. Let's split the time scale by timestamps $t_0 = 0, t_1, t_2, \ldots$, such that in every time interval $(t_i, t_{i+1})$ the system stays only in one mode, and that crossing such a timestamp, it changes its mode. Studying the PLT system in mode $\mathcal{M}$ over such interval $(t_i, t_{i+1})$, we can define its solution as $x^\mathcal{M}_f(\tau, \overline{x}_0)$ for flows rates and $b^\mathcal{M}_n(\tau, \overline{x}_0, \overline{b}_0)$, where $\tau = t - t_i$ is time elapsed from last timestamp crossed and $\overline{x}_0, \overline{b}_0$ are initial values. As we see $x^\mathcal{M}_f(\tau, \overline{x}_0)$ does not depends on initial values of backlogs. But another point, that we should notice, is dependency of $x^\mathcal{M}_f(\cdot)$ on $p_n(t)$, which now should become continuous (only inside our time interval). Specifying the mode $\mathcal{M}$, the PLT equation \ref{eq:PLT} now looks like this.
+\begin{equation}
+    p_n(\tau) = 
+    \begin{cases}
+        h(0) & \mathcal{M}[n]=\mathcal{B} \\
+        h(\tau) & \mathcal{M}[n]=\mathcal{A}
+    \end{cases}
+\end{equation}
+Now we can study the PLT system by defining its mode $\mathcal{M}$. First, we should discover valid initial values and time the system spend in given mode (which would depends on it initial values).
+
+Suppose we have the PLT system in at time $t$ and we know that it is entering a mode $\mathcal{M}$. Assuming that, backlog length of $n$th router should be below $\beta$ if $\mathcal{M}[n]=\mathcal{B}$ and above if $\mathcal{M}[n]=\mathcal{A}$. But it is also possible, that $b_n(t) = \beta$. In such situation we should put a constraints on $\dot{b}_n(t)$. If $b_n(t) = \beta$, than $\dot{b}_n(t) < 0 \Rightarrow y_n(t) < c$ if $\mathcal{M}[n]=\mathcal{B}$ and $\dot{b}_n(t) > 0 \Rightarrow y_n(t) > c$ if $\mathcal{M}[n]=\mathcal{A}$. Another main point of defining valid set of initial values is that if system enters some mode, it leaves another mode. This means that at least at one router the backlog length should cross level $\beta$: $\exists n : b_n(t)=\beta$. Let also define the function, which maps an initial values to mode, where they are valid $\mathcal{M}(\overline{x}_0, \overline{b}_0)$ (this function is defined correctly, because fixing initial values, we fixing a solution of the system, and this defines a mode the solution is going to enter).
+
+Now, when we know that system entering mode $\mathcal{M}$ and we know its state at time $t$, which satisfies by constraints defined above, we could try to define time the system would stay in that mode (the line above $x$ and $b$ shows that it is vector of all rates and backlog lengths).
+\begin{equation}
+    H^\mathcal{M}(\overline{x}_0, \overline{b}_0) \equiv \min \limits_n \inf \{ \tau > 0 | b^\mathcal{M}_n(\tau, \overline{x}_0, \overline{b}_0) = \beta \}
+\end{equation}
+In contrast to one router model, now time spent in given mode depends on $\beta$. This happens, because not all routers enters the mode with backlog length equals $\beta$\footnote{In one router model we have $H^\mathcal{M}(x_0) \equiv \inf \{ \tau >~0 | b^\mathcal{M}(\tau, x_0, \beta) = \beta \}$ time spent in mode $\mathcal{M}$ (initial values of backlog here is always equals $\beta$), which is equivalent to $\inf \{ \tau > 0 | \int \limits_0^\tau \dot{b}^\mathcal{M}(\xi, x_0, \beta) d\xi = 0 \}$ or $\inf \{ \tau >~0 | \int \limits_0^\tau \left( x^\mathcal{M}(\xi, x_0) - c \right) d\xi = 0 \}$ and the dependency on $\beta$ is gone}. 
+
+The trajectory of such system could be described as a dynamic on a graph of modes. The transition rules on such graph depend on initial values with which the system entered its mode. Let the system be in a state $\overline{x}, \overline{b}$ at timestamp $t_i$. Then its state at next timestamp $t_{i+1}$ is defined as follows.
+\begin{equation}
+    \mathcal{F}(\overline{x}, \overline{b}) \equiv (\overline{x}^{\mathcal{M}(\overline{x}, \overline{b})}(H^\mathcal{M}(\overline{x}, \overline{b}), \overline{x}), \overline{b}^{\mathcal{M}(\overline{x}, \overline{b})}(H^\mathcal{M}(\overline{x}, \overline{b}), \overline{x}, \overline{b}))
+\end{equation}
+Or simply we estimate a next system mode $\mathcal{M}(\overline{x}, \overline{b})$, calculates it solution $\overline{x}^{\mathcal{M}(\overline{x}, \overline{b})}$ and $\overline{b}^{\mathcal{M}(\overline{x}, \overline{b})}$ and values of that solution at time, when the system leaves this mode, $H^\mathcal{M}(\overline{x}, \overline{b})$. To handle such a dynamic, we would fix a topology of a network to a simple structure with two router, which is described in following subsection.
+
+\subsection{Two routers network topology}
+\label{subsec:two_routers}
+As we see in \cite[Proposition 7.1]{Lai:PLT}, to proof, that system has at least one cycle, we need to define a map from a compact subset of flow rates and backlog lengths $(\overline{x}, \overline{b})$. In a one router topology it is done by defining a map from set of valid initial values of $\mathcal{B}$ mode, which is compact, to itself through set of valid initial values of $\mathcal{A}$ mode : $\mathcal{F^A} \circ \mathcal{F^B}$. In our case, we have to define a mapping from set (actually subset) of valid initial values of $\mathcal{BB}\ldots\mathcal{B}$ mode. The difficulty in a case of several states, that we have to estimate all transitions between all modes. Let us do it for a two routers network topology.
+
+Let's have a network with two routers and three flows with a following routing matrix.
+\begin{equation}
+    R = 
+    \begin{pmatrix}
+        1 & 0 \\
+        0 & 1 \\
+        1 & 1 \\
+    \end{pmatrix}
+\end{equation}
+We would also make another assumption: TCP protocols used by flows a all the same, i.e. $U_1(\cdot)=U_2(\cdot)=U_3(\cdot) \equiv U(\cdot)$ and $\kappa_1 = \kappa_2 = \kappa_3 \equiv \kappa$ and for simplicity we put $\kappa = 1$. The PLT system now looks like this.
+\begin{numcases}{}
+    \dot{x}_1(t) = 1 - \frac{x_1 p_1}{(x_1 + x_3) U'(x_1)} \label{eq:x1} \\
+    \dot{x}_2(t) = 1 - \frac{x_2 p_2}{(x_2 + x_3) U'(x_2)} \label{eq:x2} \\
+    \dot{x}_3(t) = 1 - \frac{x_3 p_1}{(x_1 + x_3) U'(x_3)} - \frac{x_3 p_2}{(x_2 + x_3) U'(x_3)} \label{eq:x3} \\
+    \dot{b}_1(t) = x_1 + x_3 - c \label{eq:b1} \\
+    \dot{b}_2(t) = x_2 + x_3 - c \label{eq:b2} \\
+\end{numcases}
